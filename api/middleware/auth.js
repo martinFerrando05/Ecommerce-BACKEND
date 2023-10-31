@@ -10,16 +10,18 @@ async function validateUser(req, res, next) {
 
   const user = await Users.findByPk(data.payload.id);
 
-  req.user = {
-    payload: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      lastName: user.lastName,
-      address: user.address,
-      isAdmin: user.isAdmin,
-    },
-  };
+  user
+    ? (req.user = {
+        payload: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          lastName: user.lastName,
+          address: user.address,
+          isAdmin: user.isAdmin,
+        },
+      })
+    : "";
 
   if (data) return next();
 

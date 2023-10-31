@@ -87,10 +87,6 @@ cartRouter.delete("/:productId", validateUser, async (req, res, next) => {
 
   Users.findOne({ where: { email } })
     .then((findUser) => {
-      if (!findUser) {
-        return res.sendStatus(404).end();
-      }
-
       Products.findByPk(productId)
         .then((findProduct) => {
           if (!findProduct) {
