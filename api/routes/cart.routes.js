@@ -27,8 +27,8 @@ cartRouter.get("/", validateUser, (req, res, next) => {
 
 cartRouter.post("/:productId", validateUser, (req, res, next) => {
   const { email } = req.user.payload;
-
   const productId = req.params.productId;
+  const quantity = req.body.quantity || 1;
 
   Users.findOne({ where: { email } }).then((user) => {
     Products.findByPk(productId)
@@ -49,7 +49,7 @@ cartRouter.post("/:productId", validateUser, (req, res, next) => {
             return cart;
           })
           .then((cart) => {
-            cart.total += product.price;
+            cart.total += product.price * quantity; // Actualiza el total multiplicando por la cantidad
             cart.save();
             cart.getProducts().then((allProducts) => {
               const existsOnCart = allProducts.find(
@@ -57,10 +57,10 @@ cartRouter.post("/:productId", validateUser, (req, res, next) => {
               );
               if (existsOnCart) {
                 const existingCartItem = existsOnCart.cart_products;
-                existingCartItem.quantity += 1;
+                existingCartItem.quantity += quantity; // Actualiza la cantidad
                 return existingCartItem.save();
               } else {
-                cart.addProduct(product);
+                cart.addProduct(product, { through: { quantity } }); // Agrega la cantidad como atributo a través de la relación
               }
             });
           })
@@ -79,7 +79,7 @@ cartRouter.post("/:productId", validateUser, (req, res, next) => {
   });
 });
 
-//Ruta para eliminar un producto del carrito PARA REVISAR JUNTO AL FRONT
+//Ruta para eliminar un producto del carrito
 
 cartRouter.delete("/:productId", validateUser, async (req, res, next) => {
   const { email } = req.user.payload;
@@ -87,10 +87,6 @@ cartRouter.delete("/:productId", validateUser, async (req, res, next) => {
 
   Users.findOne({ where: { email } })
     .then((findUser) => {
-      if (!findUser) {
-        return res.sendStatus(404).end();
-      }
-
       Products.findByPk(productId)
         .then((findProduct) => {
           if (!findProduct) {
