@@ -3,10 +3,10 @@ require("dotenv").config();
 const Sequelize = require("sequelize");
 const db = new Sequelize(
   process.env.DB_NAME,
-  "ecommerce_mlf2",
-  "4AG9jj84HuYoQcePBAYdDJIdVHCpTIvh",
+  "ecommerce_lhbt_user",
+  "XBOOJlebMFz3RZljhDYQmqvwfTY9PmeA",
   {
-    host: "dpg-cl0hgrqs1bgc73b7eq1g-a",
+    host: "dpg-cl0iav237rbc73bfhmmg-a",
     dialect: "postgres",
     logging: false,
   }
