@@ -6,7 +6,7 @@ const db = new Sequelize(
   "ecommerce_mlf2",
   "4AG9jj84HuYoQcePBAYdDJIdVHCpTIvh",
   {
-    host: "localhost",
+    host: "dpg-cl0hgrqs1bgc73b7eq1g-a",
     dialect: "postgres",
     logging: false,
   }
